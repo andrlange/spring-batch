@@ -1,0 +1,36 @@
+version: "3"
+
+services:
+  # Database
+  mysql:
+    platform: linux/x86_64
+    image: mysql:8.0.33
+    volumes:
+      -  ~/.docker-conf/mysql/springbatch:/var/lib/mysql
+    restart: always
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: spring_batch_mysql
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    networks:
+      - mysql-phpmyadmin
+
+  # phpmyadmin
+  phpmyadmin:
+    depends_on:
+      - mysql
+    image: phpmyadmin
+    restart: always
+    ports:
+      - 9090:80
+    environment:
+      PMA_HOST: 192.168.40.20
+      MYSQL_ROOT_PASSWORD: password
+    networks:
+      - mysql-phpmyadmin
+
+networks:
+  mysql-phpmyadmin:
