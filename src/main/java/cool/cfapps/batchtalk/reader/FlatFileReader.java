@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class FlatFileReader {
     public FlatFileItemReader<StudentModel> flatFileItemReader(String inputFile) {
-        log.info("Reading file {}", inputFile);
+        log.info("input file {}", inputFile);
         FlatFileItemReader<StudentModel> reader = new FlatFileItemReader<>();
         reader.setResource(new FileSystemResource(inputFile));
         reader.setLineMapper(new DefaultLineMapper<>() {

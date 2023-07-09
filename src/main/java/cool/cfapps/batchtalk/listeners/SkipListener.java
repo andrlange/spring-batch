@@ -20,7 +20,7 @@ public class SkipListener {
     @OnSkipInRead
     public void onSkipRead(Throwable throwable) {
         if (throwable instanceof FlatFileParseException) {
-            log.info("FlatFileParseException");
+            log.warn("FlatFileParseException");
             fileWriter(output+"chunks-jobs/csv-job/reader/read_exceptions.txt",
                     "Line:" + ((FlatFileParseException) throwable).getLineNumber() + " => " +
                     ((FlatFileParseException) throwable).getInput());

@@ -19,37 +19,37 @@ import java.util.Map;
 public class JobRunnerService {
 
     private final JobRunner jobRunner;
-    //private final Job restJob;
+
     private final Job csvJob;
+    private final Job csvToJdbcJob;
+    private final Job xmlToCsvJob;
 
-    //private final Job jsonJob;
-    //private final Job xmlJob;
-    //private final Job csvToJdbcJob;
-    //private final Job csvToRestJob;
-    //private final Job folderCaptureJob;
+    private final Job csvToXmlJob;
 
+    private final Job jsonToCsvJob;
+    private final Job csvToJsonJob;
 
     public JobRunnerService(JobRunner jobRunner,
-                            //@Qualifier("processRestJob") Job restJob,
-                            @Qualifier("processCsvJob") Job csvJob//,
-                            //@Qualifier("processJsonJob") Job jsonJob,
-                            //@Qualifier("processXmlJob") Job xmlJob,
-                            //@Qualifier("processCsvToJdbcJob") Job csvToJdbcJob,
-                            //@Qualifier("processCsvToRestJob") Job csvToRestJob,
-                            //@Qualifier("processFolderCaptureJob") Job folderCaptureJob)
+                            @Qualifier("processCsvJob") Job csvJob,
+                            @Qualifier("processCsvToJdbcJob") Job csvToJdbcJob,
+                            @Qualifier("processXmlToCsvJob") Job xmlToCsvJob,
+                            @Qualifier("processCsvToXmlJob") Job csvToXmlJob,
+                            @Qualifier("processJsonToCsvJob") Job jsonToCsvJob,
+                            @Qualifier("processCsvToJsonJob") Job csvToJsonJob
     ){
         this.jobRunner = jobRunner;
-        //this.restJob = restJob;
         this.csvJob = csvJob;
-        //this.jsonJob = jsonJob;
-        //this.xmlJob = xmlJob;
-        //this.csvToJdbcJob = csvToJdbcJob;
-        //this.csvToRestJob = csvToRestJob;
-        //this.folderCaptureJob = folderCaptureJob;
+        this.csvToJdbcJob = csvToJdbcJob;
+        this.xmlToCsvJob = xmlToCsvJob;
+        this.csvToXmlJob = csvToXmlJob;
+        this.jsonToCsvJob = jsonToCsvJob;
+        this.csvToJsonJob = csvToJsonJob;
     }
 
     @Bean
     public void sequenceJobs() {
+
+        // Simple CSV Job with exception
         log.info("CsvJob run at {}", LocalDateTime.now());
         Map<String, JobParameter<?>> jobParametersMap = new HashMap<>();
 
@@ -57,45 +57,49 @@ public class JobRunnerService {
         JobParameters jobParameters = new JobParameters(jobParametersMap);
 
         jobRunner.runJob(csvJob, jobParameters);
-        /*
-        log.info("JsonJob run at {}", LocalDateTime.now());
-        jobParametersMap.clear();
-        jobParametersMap.put("currentTime", new JobParameter<>(System.currentTimeMillis(), Long.class));
-        jobParameters = new JobParameters(jobParametersMap);
-        jobRunner.runJob(jsonJob, jobParameters);
 
-        log.info("RestJob run at {}", LocalDateTime.now());
-        jobParametersMap.clear();
-        jobParametersMap.put("currentTime", new JobParameter<>(System.currentTimeMillis(), Long.class));
-        jobParameters = new JobParameters(jobParametersMap);
-        jobRunner.runJob(restJob, jobParameters);
 
-        log.info("XmlJob run at {}", LocalDateTime.now());
-        jobParametersMap.clear();
-        jobParametersMap.put("currentTime", new JobParameter<>(System.currentTimeMillis(), Long.class));
-        jobParameters = new JobParameters(jobParametersMap);
-        jobRunner.runJob(xmlJob, jobParameters);
-
-        log.info("CsvToRestJob run at {}", LocalDateTime.now());
-        jobParametersMap.clear();
-        jobParametersMap.put("currentTime", new JobParameter<>(System.currentTimeMillis(), Long.class));
-        jobParameters = new JobParameters(jobParametersMap);
-        jobRunner.runJob(csvToRestJob, jobParameters);
-
-        /*
+        // CSV to JDBC Job
         log.info("CsvToJdbcJob run at {}", LocalDateTime.now());
         jobParametersMap.clear();
         jobParametersMap.put("currentTime", new JobParameter<>(System.currentTimeMillis(), Long.class));
         jobParameters = new JobParameters(jobParametersMap);
+
         jobRunner.runJob(csvToJdbcJob, jobParameters);
 
-
-        log.info("FolderCapture run at {}", LocalDateTime.now());
+        // XML to CSV Job
+        log.info("XmlToCsvJob run at {}", LocalDateTime.now());
         jobParametersMap.clear();
         jobParametersMap.put("currentTime", new JobParameter<>(System.currentTimeMillis(), Long.class));
         jobParameters = new JobParameters(jobParametersMap);
-        jobRunner.runJob(folderCaptureJob, jobParameters);
 
-         */
+        jobRunner.runJob(xmlToCsvJob, jobParameters);
+
+        // CSV to XML Job
+        log.info("CsvToXmlJob run at {}", LocalDateTime.now());
+        jobParametersMap.clear();
+        jobParametersMap.put("currentTime", new JobParameter<>(System.currentTimeMillis(), Long.class));
+        jobParameters = new JobParameters(jobParametersMap);
+
+        jobRunner.runJob(csvToXmlJob, jobParameters);
+
+
+        // JSON to CSV Job
+        log.info("JsonToCsvJob run at {}", LocalDateTime.now());
+        jobParametersMap.clear();
+        jobParametersMap.put("currentTime", new JobParameter<>(System.currentTimeMillis(), Long.class));
+        jobParameters = new JobParameters(jobParametersMap);
+
+        jobRunner.runJob(jsonToCsvJob, jobParameters);
+
+        // CSV to JSON Job
+        log.info("CsvToJsonJob run at {}", LocalDateTime.now());
+        jobParametersMap.clear();
+        jobParametersMap.put("currentTime", new JobParameter<>(System.currentTimeMillis(), Long.class));
+        jobParameters = new JobParameters(jobParametersMap);
+
+        jobRunner.runJob(csvToJsonJob, jobParameters);
+
+
     }
 }

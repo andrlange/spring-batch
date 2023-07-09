@@ -12,14 +12,14 @@ public class FirstStepListener implements StepExecutionListener {
     @Override
     public void beforeStep(StepExecution stepExecution) {
         StepExecutionListener.super.beforeStep(stepExecution);
-        log.info("FirstStepListener beforeJob : {}", stepExecution.getStepName());
+        log.info("FirstStepListener beforeStep : {}", stepExecution.getStepName());
         log.info("FirstStepListener JobContext: {}", stepExecution.getJobExecution().getExecutionContext());
         log.info("FirstStepListener Context: {}", stepExecution.getExecutionContext());
     }
 
     @Override
     public ExitStatus afterStep(StepExecution stepExecution) {
-        log.info("FirstStepListener afterJob : {}", stepExecution.getStepName());
+        log.info("FirstStepListener afterStep : {}", stepExecution.getStepName());
         log.info("FirstStepListener JobContext: {}", stepExecution.getJobExecution().getExecutionContext());
         log.info("FirstStepListener Context: {}", stepExecution.getExecutionContext());
 

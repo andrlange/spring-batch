@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 public class StudentWriter implements ItemWriter<StudentModel> {
     @Override
     public void write(Chunk<? extends StudentModel> chunk) throws Exception {
-        log.info("writing Items:");
+        log.info("writing Items: chuck size-> {}", chunk.size());
         chunk.forEach(item -> log.info("item -> {}", item));
     }
 }
