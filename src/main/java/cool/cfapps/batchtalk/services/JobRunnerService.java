@@ -20,6 +20,7 @@ public class JobRunnerService {
 
     private final JobRunner jobRunner;
 
+    private final Job firstJob;
     private final Job csvJob;
     private final Job csvToJdbcJob;
     private final Job xmlToCsvJob;
@@ -30,6 +31,7 @@ public class JobRunnerService {
     private final Job csvToJsonJob;
 
     public JobRunnerService(JobRunner jobRunner,
+                            @Qualifier("firstJob") Job firstJob,
                             @Qualifier("processCsvJob") Job csvJob,
                             @Qualifier("processCsvToJdbcJob") Job csvToJdbcJob,
                             @Qualifier("processXmlToCsvJob") Job xmlToCsvJob,
@@ -37,6 +39,7 @@ public class JobRunnerService {
                             @Qualifier("processJsonToCsvJob") Job jsonToCsvJob,
                             @Qualifier("processCsvToJsonJob") Job csvToJsonJob
     ){
+        this.firstJob = firstJob;
         this.jobRunner = jobRunner;
         this.csvJob = csvJob;
         this.csvToJdbcJob = csvToJdbcJob;
@@ -49,14 +52,22 @@ public class JobRunnerService {
     @Bean
     public void sequenceJobs() {
 
-        // Simple CSV Job with exception
-        log.info("CsvJob run at {}", LocalDateTime.now());
+        // A first Simple Tasklet Job
+        log.info("TaskletJob run at {}", LocalDateTime.now());
         Map<String, JobParameter<?>> jobParametersMap = new HashMap<>();
 
         jobParametersMap.put("currentTime", new JobParameter<>(System.currentTimeMillis(), Long.class));
         JobParameters jobParameters = new JobParameters(jobParametersMap);
 
-        jobRunner.runJob(csvJob, jobParameters);
+        jobRunner.runJob(firstJob, jobParameters);
+
+        // Simple CSV Job with exception
+        log.info("CsvJob run at {}", LocalDateTime.now());
+        jobParametersMap.clear();
+        jobParametersMap.put("currentTime", new JobParameter<>(System.currentTimeMillis(), Long.class));
+        jobParameters = new JobParameters(jobParametersMap);
+
+        //jobRunner.runJob(csvJob, jobParameters);
 
 
         // CSV to JDBC Job
@@ -65,7 +76,7 @@ public class JobRunnerService {
         jobParametersMap.put("currentTime", new JobParameter<>(System.currentTimeMillis(), Long.class));
         jobParameters = new JobParameters(jobParametersMap);
 
-        jobRunner.runJob(csvToJdbcJob, jobParameters);
+        //jobRunner.runJob(csvToJdbcJob, jobParameters);
 
         // XML to CSV Job
         log.info("XmlToCsvJob run at {}", LocalDateTime.now());
@@ -73,7 +84,7 @@ public class JobRunnerService {
         jobParametersMap.put("currentTime", new JobParameter<>(System.currentTimeMillis(), Long.class));
         jobParameters = new JobParameters(jobParametersMap);
 
-        jobRunner.runJob(xmlToCsvJob, jobParameters);
+        //jobRunner.runJob(xmlToCsvJob, jobParameters);
 
         // CSV to XML Job
         log.info("CsvToXmlJob run at {}", LocalDateTime.now());
@@ -81,7 +92,7 @@ public class JobRunnerService {
         jobParametersMap.put("currentTime", new JobParameter<>(System.currentTimeMillis(), Long.class));
         jobParameters = new JobParameters(jobParametersMap);
 
-        jobRunner.runJob(csvToXmlJob, jobParameters);
+        //jobRunner.runJob(csvToXmlJob, jobParameters);
 
 
         // JSON to CSV Job
@@ -90,7 +101,7 @@ public class JobRunnerService {
         jobParametersMap.put("currentTime", new JobParameter<>(System.currentTimeMillis(), Long.class));
         jobParameters = new JobParameters(jobParametersMap);
 
-        jobRunner.runJob(jsonToCsvJob, jobParameters);
+        //jobRunner.runJob(jsonToCsvJob, jobParameters);
 
         // CSV to JSON Job
         log.info("CsvToJsonJob run at {}", LocalDateTime.now());
@@ -98,7 +109,7 @@ public class JobRunnerService {
         jobParametersMap.put("currentTime", new JobParameter<>(System.currentTimeMillis(), Long.class));
         jobParameters = new JobParameters(jobParametersMap);
 
-        jobRunner.runJob(csvToJsonJob, jobParameters);
+        //jobRunner.runJob(csvToJsonJob, jobParameters);
 
 
     }
