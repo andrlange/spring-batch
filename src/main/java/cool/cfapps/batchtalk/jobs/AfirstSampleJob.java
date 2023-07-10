@@ -57,7 +57,7 @@ public class AfirstSampleJob {
 
     private Tasklet firstTasklet() {
         return (contribution, chunkContext) -> {
-            System.out.println("EXECUTING FIRST TASKLET");
+            log.info("EXECUTING FIRST TASKLET");
             contribution.getStepExecution().getExecutionContext().put("foo", "bar");
             contribution.getStepExecution().getJobExecution().getExecutionContext().put("foo2", "bar2");
             return RepeatStatus.FINISHED;
@@ -71,7 +71,9 @@ public class AfirstSampleJob {
     }
     private Tasklet secondTasklet() {
         return (contribution, chunkContext) -> {
-            System.out.println("EXECUTING SECOND TASKLET");
+            log.info("EXECUTING SECOND TASKLET");
+            String value = (String)contribution.getStepExecution().getJobExecution().getExecutionContext().get("foo2");
+            log.info("kv pair from step1 -> foo2: " + value);
             return RepeatStatus.FINISHED;
         };
     }
